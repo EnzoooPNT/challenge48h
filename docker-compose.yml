@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo:/data/db
+  web1:
+    restart: on-failure
+    build: ./web1
+    ports:
+      - '81:5000'
+  web2:
+    restart: on-failure
+    build: ./web2
+    ports:
+      - '82:5000'
+  nginx:
+    build: ./nginx
+    ports:
+    - '80:80'
+    depends_on:
+    - web1
+    - web2
